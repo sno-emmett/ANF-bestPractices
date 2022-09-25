@@ -1,0 +1,679 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Rhino &amp; AutoCAD Best Practices</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="0cb60285-b23a-4485-9f55-297c9b6674c7" class="page sans"><header><div class="page-header-icon undefined"></div><h1 class="page-title">Rhino &amp; AutoCAD Best Practices</h1></header><div class="page-body"><h1 id="9bb10bb9-2391-4bfb-9a37-dce286ddc4f0" class="">🦏Rhino</h1><hr id="55596cf6-d1a4-49c5-8294-4dc7b03e3063"/><h2 id="81dbecd7-ac52-456c-8509-bedb06167335" class="">Reducing Save Times</h2><p id="63f7d828-e696-4be5-88ee-becf5b9c01a2" class="">The following settings are intended to reduce the time it takes Rhino to save files to the network.</p><ol type="1" id="da4b71ac-8433-4d64-b5d9-ccb929904f93" class="numbered-list" start="1"><li>Go to the <strong>Tools</strong> pulldown and select <strong>Options </strong><ul id="87018576-8b6e-42b5-8d6d-6ec0e38df857" class="bulleted-list"><li style="list-style-type:disc">Alternatively, enter <code>_Option</code> in Rhino’s command line. </li></ul></li></ol><ol type="1" id="b2d931da-7219-4541-acb0-dbd230ca5db9" class="numbered-list" start="2"><li>In the left sidebar of the next window select <strong>Rhino Options → Advanced</strong></li></ol><ol type="1" id="46717917-a0c0-478b-bc5a-9d7f4084c685" class="numbered-list" start="3"><li>In the top search bar where it says “<em>Type to filter keys…”</em> input:<ol type="a" id="5b6779e2-6c9a-4765-bbc5-b85fa5c870e4" class="numbered-list" start="1"><li><code>Rhino.Options.FileSettings.WriteLocalTempFileWhenSaving </code>
+∟ Set the Value →  <strong><code>True</code></strong></li></ol><ol type="a" id="c696b820-556d-42d6-8602-6a17ef6beecd" class="numbered-list" start="2"><li><code>Rhino.Options.Advanced.UseCompressionWhenSaving</code><p id="f08c180a-8971-46c0-936d-6fc1bd23dfde" class="">∟ Set the Value → <strong><code>False</code></strong></p><p id="e9e1e576-7eed-4ed1-b708-487c08a7fab4" class="">
+</p></li></ol></li></ol><h1 id="3da865e0-beb6-40cc-92ec-d8ba8bb2cecd" class="">📏AutoCAD</h1><hr id="861cf256-b435-4b92-8fd7-7c843931d58a"/><h2 id="d3fdfede-ccfc-4226-8295-ea45ffa9a088" class=""><strong>Using the </strong>LOCAL AutoCAD <strong>profile</strong></h2><p id="00971efe-d5c1-408d-b55b-c54b59c18043" class="">If you are using AutoCAD you should be using the <strong>LOCAL AutoCAD </strong>profile. That way AutoCAD is not reaching out over your internet connection for things like fonts, hatch patterns, custom commands, tool palettes, etc. The local profile uses a local copy of all that stuff which is way faster.</p><p id="df647923-48ed-4d8f-a13d-76dfe41cf3b8" class="">
+</p><p id="ee5a67b5-b2d9-4681-a21d-9ddec71a3593" class="">If you&#x27;re not already using it, here&#x27;s how to set it up (don&#x27;t panic it&#x27;s easy):</p><ol type="1" id="4125bf3b-8ead-4d53-9e10-f27cc0ca2c10" class="numbered-list" start="1"><li>Make sure AutoCAD is <em>not </em>running</li></ol><ol type="1" id="9d26bafe-11f8-4f65-9ffe-2069dd27a1dc" class="numbered-list" start="2"><li>Make sure the VPN is active and you can see the Z drive</li></ol><ol type="1" id="c30993de-49a3-402e-ae7b-995d6e462b4b" class="numbered-list" start="3"><li>Browse to &quot;Z:\CAD-Common\AutoCAD 2020&quot;</li></ol><ol type="1" id="0788f306-ccfe-4c65-94bb-03949afef6d4" class="numbered-list" start="4"><li>Double-click the file called &quot;Update SNO LOCAL AutoCAD Folders.bat&quot;</li></ol><ol type="1" id="07f27f97-3a7d-4a22-bc6a-550328adc82a" class="numbered-list" start="5"><li>A whole mess of gibberish will scroll by and then the box will close.</li></ol><ol type="1" id="4368663b-74fd-4e61-a026-688f68b3e9e8" class="numbered-list" start="6"><li>Launch AutoCAD from the new icon on your desktop called &quot;SNO LOCAL AutoCAD 2020&quot;</li></ol><p id="d8637979-343b-403f-a165-54b4ef71014c" class="">
+</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="16fd3c0e-378c-4847-8eb0-c21ad088aeaf"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">The one drawback to this is that when I make a change to the AutoCAD support files on your server, they don&#x27;t <em>immediately</em> update for you (because you&#x27;ll still be looking at the cached copy on your local machine). You&#x27;ll need to run that file .BAT again to copy the new stuff to your computer.  It doesn&#x27;t happen often though and I&#x27;ll always tell you and provide the instructions.</div></figure><p id="e9a65e25-8c68-406f-b5fc-21df3ba8b49d" class="">
+</p><h2 id="a418630f-a1d9-4adb-bd17-bbd568185434" class="">Speeding up<strong> the Sheet Set Manager</strong></h2><p id="94ee5a63-9010-439a-a2c7-514adaabcc3b" class=""><span style="border-bottom:0.05em solid">Everyone </span>on the project should do this. If <strong>one person</strong> doesn&#x27;t use the following settings, <strong>no one</strong> benefits.</p><p id="50ac29af-b1ba-453f-a113-ee7dfe9fe365" class="">You may find that these settings have been set automatically; It’s still worth having a look!</p><p id="015c319e-f49d-4724-a240-91d6bec73554" class="">
+</p><p id="551c8017-94a7-4f24-bd8d-3fb92a861b28" class="">Change these settings in AutoCAD to cut down on the amount of SSM generated traffic:</p><ol type="1" id="8ea06920-e139-465e-86f3-c2273b24a6e8" class="numbered-list" start="1"><li>Type <code>SSMSHEETSTATUS</code> and press ENTER, set it to <code>0</code>. (<em>this one does the most good</em>)<ul id="06f653e8-6501-4cc4-84b9-d35d9f725a13" class="bulleted-list"><li style="list-style-type:disc">Sheet lock status will no longer be displayed in the sheet set manager. The files will still be locked of course, but you won&#x27;t know until you try to open it (just like in the good old days).</li></ul></li></ol><ol type="1" id="7ecae695-32b4-4df8-8a3a-bb8b634f2dc5" class="numbered-list" start="2"><li>Type <code>SSMAUTOOPEN</code> and press ENTER, set it to <code>0</code>.</li></ol><ol type="1" id="74be2dc5-ddd4-4e2a-95dd-23908857ee6b" class="numbered-list" start="3"><li>Type <code>SSLOCATE</code> and press ENTER, set it to <code>0</code>.<ul id="377abe78-2154-459b-956e-d1cdac8be449" class="bulleted-list"><li style="list-style-type:disc">Steps 2 and three work together (both 0 or both 1). When set to 0, opening a file that is a <em>member </em>of a sheet set will no longer <em>also open the sheet set</em> automatically. So you can work on a file without having the sheet set open at all. This is great if you just need to draft or edit text, etc. However, If you need to rename sheets, place views, place tags etc. you&#x27;ll need to have the sheet set open of course - which you can still do manually.</li></ul><p id="3bd4a2b2-b0d5-4b74-8c7a-8ff407bcdb1d" class="">
+</p></li></ol><p id="56203e41-91a5-412d-a605-ef98c504f916" class="">When you&#x27;re not going to be working in a sheet set for a while or when you&#x27;re done for the night, <em>always</em> exit the sheet set by right clicking on the sheet set name in the SSM and selecting &quot;Close Sheet Set&quot;. That&#x27;s one less person sending and receiving sheet set data.</p><p id="015b37a5-d84f-4543-a84a-334bc78a3b3c" class="">
+</p><p id="103b54eb-41ef-4292-a409-61d9a84e4e06" class="">When doing things that tax the sheet set (publishing in particular, but also renaming sheets, archiving...), try to organize that with the team as best you can.  Have one person do the publishing or renaming and have everyone else exit the sheet set... if that&#x27;s possible.</p><p id="3b3a5164-4832-4425-a9cd-52df9c43372c" class="">
+</p><h2 id="182e3e69-e315-4545-b025-bd771b55190f" class="">Managing XREFs</h2><p id="2302ad25-f38e-45e2-b070-62bb2573d162" class="">All XREF paths in AutoCAD should start with a mapped drive letter, for example P:\ or O:\. This is a form of “<em>relative referencing”</em>. The alternative to relative referencing is “<em>explicit referencing.</em>” For example: “\\anf-d236\..\example.png”.When we use explicit references<strong><em> </em></strong>to a specific server location, we allow AutoCad to ignore the infrastructure that is in place to retrieve information efficiently.</p><h1 id="0197932a-617a-439c-bd29-ae5ec06bdef3" class="">General</h1><ul id="ecf9cfd3-c345-42c7-9956-adf5cc890398" class="bulleted-list"><li style="list-style-type:disc">Connect your computer to your router at home with an ethernet cable, don&#x27;t rely on wireless. Wireless is slower all around and is subject to dropouts and random VPN issues. </li></ul><ul id="ee1b568d-7fb2-42e4-9a36-3cb67c65fe21" class="bulleted-list"><li style="list-style-type:disc">When connected to the internet via ethernet make sure you disable WIFI. The ambiguity of communicating via two network connections is a common cause of VPN problems.</li></ul><ul id="8c044cb0-6e84-4a6a-a6cb-9db85b01d331" class="bulleted-list"><li style="list-style-type:disc">Get the fastest <em>synchronous </em>internet service available to you that you can afford. (synchronous meaning the same speed for upload and download). Verizon Fios fiber is a great option (close to 1 Gigabit up and down for +/- $70 a month). Ask your current provider about synchronous service. It might also be worth getting a separate line for your office if you share your internet with a whole household.</li></ul><ul id="57b9afa4-08a9-484a-8713-4cc894cb72bd" class="bulleted-list"><li style="list-style-type:disc">If possible, don&#x27;t stream music or video while you&#x27;re working (spotify, itunes, netflix, Roku, Apple TV, etc will all eat as much bandwidth as they can - stealing it away from you).</li></ul><ul id="65ecfa4a-f3f7-40b4-b43c-cdb3cc6b87ba" class="bulleted-list"><li style="list-style-type:disc">Disable WiFi calling on your cell phone<strong> </strong>if you use it a lot during the workday, home routers generally prioritize voice traffic and so if you&#x27;re on the phone, your internet slows down.</li></ul><p id="c754cd9e-9e22-462b-b221-ae4d19a187ab" class="">
+</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="e1733086-2f2e-4f55-8bb5-71ee422a2671"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Adapted from suggestions written by James Pertusi and Javier Moreno</div></figure></div></article></body></html>
